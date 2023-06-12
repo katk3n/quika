@@ -4,30 +4,14 @@ use spectrum_analyzer::scaling::*;
 use spectrum_analyzer::windows::hann_window;
 use spectrum_analyzer::{samples_fft_to_spectrum, FrequencyLimit};
 
-const SAMPLING_RATE: u32 = 44100;
-
-#[derive(Resource)]
-pub struct AudioSpectrum {
-    pub frequencies: Vec<(f32, f32)>,
-    pub max_frequency: f32,
-    pub max_amplitude: f32,
-}
-
-impl Default for AudioSpectrum {
-    fn default() -> Self {
-        Self {
-            frequencies: vec![],
-            max_frequency: 0.0,
-            max_amplitude: 0.0,
-        }
-    }
-}
+use super::resources::AudioSpectrum;
 
 const NUM_SAMPLES: usize = 2048;
 const MIN_FREQUENCY: f32 = 27.0;
 const MAX_FREQUENCY: f32 = 2000.0;
+const SAMPLING_RATE: u32 = 44100;
 
-pub fn update_spectrum(
+pub fn update_audio_spectrum(
     mut audio_spectrum: ResMut<AudioSpectrum>,
     mut cons: NonSendMut<Consumer<f32>>,
 ) {
