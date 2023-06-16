@@ -1,13 +1,10 @@
-use std::{
-    collections::hash_map::DefaultHasher,
-    hash::{Hash, Hasher},
-};
+use rand::Rng;
 
 use bevy::{core_pipeline::bloom::BloomSettings, prelude::*};
 
 use crate::audio_spectrum::resources::AudioSpectrum;
 
-use super::components::Revolving;
+use super::components::*;
 
 pub fn setup_scene(
     mut commands: Commands,
@@ -27,7 +24,7 @@ pub fn setup_scene(
     ));
 
     let emissive_color1 = materials.add(StandardMaterial {
-        emissive: Color::rgb_linear(10.0, 20.0, 10.0),
+        emissive: Color::hsl(70.0, 10.0, 0.5),
         ..default()
     });
     let emissive_color2 = materials.add(StandardMaterial {
@@ -44,12 +41,9 @@ pub fn setup_scene(
         .unwrap(),
     );
 
+    let mut rng = rand::thread_rng();
     for i in 0..64 {
-        let mut hasher = DefaultHasher::new();
-        i.hash(&mut hasher);
-        let rand = hasher.finish();
-
-        let material = if rand % 2 == 0 {
+        let material = if rng.gen::<f32>() < 0.5 {
             emissive_color1.clone()
         } else {
             emissive_color2.clone()
@@ -64,28 +58,35 @@ pub fn setup_scene(
             },
             Revolving {
                 radius: (i + 10) as f32 * 0.3,
-                threshold: (rand % 1000) as f32 / 100.0,
+                threshold: rng.gen::<f32>() * 2.0 * std::f32::consts::PI,
+            },
+            Bouncing {
+                threshold: rng.gen::<f32>() * 2.0 * std::f32::consts::PI,
             },
         ));
     }
 }
 
-pub fn revolve_spheres(
-    time: Res<Time>,
-    mut query: Query<(&mut Transform, &Revolving)>,
-    audio_spectrum: Res<AudioSpectrum>,
-) {
-    let amp = if audio_spectrum.max_amplitude > 0.5 {
-        audio_spectrum.max_amplitude * 100.0
-    } else {
-        0.0
-    };
+pub fn revolve_spheres(time: Res<Time>, mut query: Query<(&mut Transform, &Revolving)>) {
     for (mut transform, revolving) in query.iter_mut() {
         transform.translation.x =
             revolving.radius * (revolving.threshold + time.elapsed_seconds() * 0.5).cos();
         transform.translation.z =
             revolving.radius * (revolving.threshold + time.elapsed_seconds() * 0.5).sin();
-        transform.translation.y =
-            (amp + revolving.radius + revolving.threshold + time.elapsed_seconds()).sin();
+    }
+}
+
+pub fn bounce_spheres(
+    time: Res<Time>,
+    mut query: Query<(&mut Transform, &Bouncing)>,
+    audio_spectrum: Res<AudioSpectrum>,
+) {
+    let amp = if audio_spectrum.max_amplitude > 0.5 {
+        audio_spectrum.max_amplitude * 2.0
+    } else {
+        1.0
+    };
+    for (mut transform, bouncing) in query.iter_mut() {
+        transform.translation.y = amp * (bouncing.threshold + time.elapsed_seconds()).sin();
     }
 }

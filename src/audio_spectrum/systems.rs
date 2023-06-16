@@ -46,8 +46,8 @@ pub fn update_audio_spectrum(
     audio_spectrum.max_frequency = max_fr.val();
     audio_spectrum.max_amplitude = max_amp.val();
 
-    println!(
-        "freq: {}, amp: {}",
-        audio_spectrum.max_frequency, audio_spectrum.max_amplitude
-    );
+    //println!(
+    //    "freq: {}, amp: {}",
+    //    audio_spectrum.max_frequency, audio_spectrum.max_amplitude
+    //);
 }

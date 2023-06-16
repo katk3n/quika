@@ -15,6 +15,7 @@ fn main() {
         .add_startup_system(setup_audio_stream)
         .add_startup_system(setup_scene)
         .add_system(revolve_spheres)
+        .add_system(bounce_spheres)
         .add_system(update_audio_spectrum)
         .run();
 }
