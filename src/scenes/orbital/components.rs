@@ -9,4 +9,5 @@ pub struct Revolving {
 #[derive(Component)]
 pub struct Bouncing {
     pub threshold: f32,
+    pub frequency_range: (f32, f32),
 }

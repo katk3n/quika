@@ -1,6 +1,6 @@
 use rand::Rng;
 
-use bevy::{core_pipeline::bloom::BloomSettings, prelude::*};
+use bevy::{audio, core_pipeline::bloom::BloomSettings, prelude::*};
 
 use crate::audio_spectrum::resources::AudioSpectrum;
 
@@ -62,6 +62,7 @@ pub fn setup_scene(
             },
             Bouncing {
                 threshold: rng.gen::<f32>() * 2.0 * std::f32::consts::PI,
+                frequency_range: (i as f32 * 20.0, (i + 3) as f32 * 20.0),
             },
         ));
     }
@@ -81,12 +82,15 @@ pub fn bounce_spheres(
     mut query: Query<(&mut Transform, &Bouncing)>,
     audio_spectrum: Res<AudioSpectrum>,
 ) {
-    let amp = if audio_spectrum.max_amplitude > 0.5 {
-        audio_spectrum.max_amplitude * 2.0
-    } else {
-        1.0
-    };
+    let amp = audio_spectrum.max_amplitude;
+    let freq = audio_spectrum.max_frequency;
     for (mut transform, bouncing) in query.iter_mut() {
-        transform.translation.y = amp * (bouncing.threshold + time.elapsed_seconds()).sin();
+        let freq_range = bouncing.frequency_range;
+        let power = if amp > 0.5 && freq_range.0 <= freq && freq < freq_range.1 {
+            audio_spectrum.max_amplitude * 2.0
+        } else {
+            1.0
+        };
+        transform.translation.y = power * (bouncing.threshold + time.elapsed_seconds()).sin();
     }
 }
