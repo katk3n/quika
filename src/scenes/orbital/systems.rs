@@ -1,6 +1,6 @@
 use rand::Rng;
 
-use bevy::{core_pipeline::bloom::BloomSettings, prelude::*};
+use bevy::prelude::*;
 
 use crate::audio_processing::spectrum::AudioSpectrum;
 
@@ -11,18 +11,6 @@ pub fn setup_scene(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    commands.spawn((
-        Camera3dBundle {
-            camera: Camera {
-                hdr: true,
-                ..default()
-            },
-            transform: Transform::from_xyz(-2.0, 10.0, 40.0).looking_at(Vec3::ZERO, Vec3::Y),
-            ..default()
-        },
-        BloomSettings::default(),
-    ));
-
     let emissive_color1 = materials.add(StandardMaterial {
         emissive: Color::hsl(70.0, 10.0, 0.5),
         ..default()
