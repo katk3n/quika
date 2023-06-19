@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use ringbuf::RingBuffer;
 
-const NUM_SAMPLES: usize = 2048;
+use crate::audio_processing::NUM_SAMPLES;
 
 pub fn setup_audio_stream(world: &mut World) {
     let host = cpal::default_host();

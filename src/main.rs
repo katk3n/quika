@@ -1,21 +1,15 @@
-pub mod audio_spectrum;
-pub mod audio_stream;
+pub mod audio_processing;
 pub mod scenes;
 
-use audio_spectrum::{resources::*, systems::*};
-use audio_stream::systems::*;
+use audio_processing::AudioProcessingPlugin;
 use bevy::prelude::*;
-use scenes::orbital::systems::*;
+use scenes::orbital::OrbitalPlugin;
 
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::BLACK))
         .add_plugins(DefaultPlugins)
-        .init_resource::<AudioSpectrum>()
-        .add_startup_system(setup_audio_stream)
-        .add_startup_system(setup_scene)
-        .add_system(revolve_spheres)
-        .add_system(bounce_spheres)
-        .add_system(update_audio_spectrum)
+        .add_plugin(AudioProcessingPlugin)
+        .add_plugin(OrbitalPlugin)
         .run();
 }

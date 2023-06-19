@@ -1,8 +1,8 @@
 use rand::Rng;
 
-use bevy::{audio, core_pipeline::bloom::BloomSettings, prelude::*};
+use bevy::{core_pipeline::bloom::BloomSettings, prelude::*};
 
-use crate::audio_spectrum::resources::AudioSpectrum;
+use crate::audio_processing::spectrum::AudioSpectrum;
 
 use super::components::*;
 
@@ -86,8 +86,8 @@ pub fn bounce_spheres(
     let freq = audio_spectrum.max_frequency;
     for (mut transform, bouncing) in query.iter_mut() {
         let freq_range = bouncing.frequency_range;
-        let power = if amp > 0.5 && freq_range.0 <= freq && freq < freq_range.1 {
-            audio_spectrum.max_amplitude * 2.0
+        let power = if amp > 0.1 && freq_range.0 <= freq && freq < freq_range.1 {
+            1.0 + audio_spectrum.max_amplitude * 2.0
         } else {
             1.0
         };
