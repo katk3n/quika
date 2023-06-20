@@ -12,6 +12,7 @@ impl Plugin for RipplePlugin {
         app.add_startup_system(setup_scene)
             .add_system(bounce_particles)
             .add_system(spawn_ripple)
-            .add_system(despawn_ripples);
+            .add_system(despawn_ripples)
+            .add_system(switch_visibility);
     }
 }

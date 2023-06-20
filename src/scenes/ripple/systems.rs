@@ -85,3 +85,14 @@ pub fn despawn_ripples(mut commands: Commands, time: Res<Time>, query: Query<(En
         }
     }
 }
+
+pub fn switch_visibility(
+    mut query: Query<&mut Visibility, With<Bouncing>>,
+    keyboard_input: Res<Input<KeyCode>>,
+) {
+    if keyboard_input.just_pressed(KeyCode::Key2) {
+        for mut visibility in query.iter_mut() {
+            visibility.is_visible = !visibility.is_visible;
+        }
+    }
+}

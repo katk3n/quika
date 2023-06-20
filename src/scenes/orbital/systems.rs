@@ -82,3 +82,14 @@ pub fn bounce_spheres(
         transform.translation.y = power * (bouncing.threshold + time.elapsed_seconds()).sin();
     }
 }
+
+pub fn switch_visibility(
+    mut query: Query<&mut Visibility, With<Bouncing>>,
+    keyboard_input: Res<Input<KeyCode>>,
+) {
+    if keyboard_input.just_pressed(KeyCode::Key1) {
+        for mut visibility in query.iter_mut() {
+            visibility.is_visible = !visibility.is_visible;
+        }
+    }
+}
