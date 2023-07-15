@@ -2,6 +2,8 @@ use bevy::prelude::*;
 
 use crate::{audio_processing::spectrum::AudioSpectrum, scenes::ripple::components::*};
 
+const BASE_HEIGHT: f32 = -5.0;
+
 pub fn setup_scene(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
@@ -31,7 +33,7 @@ pub fn setup_scene(
                     material,
                     transform: Transform::from_xyz(
                         (i - 64) as f32 * 0.3,
-                        -5.0,
+                        BASE_HEIGHT,
                         (j - 64) as f32 * 0.3,
                     ),
                     ..default()
@@ -58,7 +60,7 @@ pub fn bounce_particles(
             }
         }
 
-        transform.translation.y = height - 5.0;
+        transform.translation.y = height + BASE_HEIGHT;
     }
 }
 
@@ -68,7 +70,7 @@ pub fn spawn_ripple(mut commands: Commands, time: Res<Time>, audio_spectrum: Res
         commands.spawn(Source {
             point: Vec3 {
                 x: 0.0,
-                y: -5.0,
+                y: BASE_HEIGHT,
                 z: 0.0,
             },
             spawn_time: time.elapsed_seconds(),

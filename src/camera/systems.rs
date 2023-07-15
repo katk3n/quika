@@ -18,7 +18,7 @@ impl Default for OrbitCamera {
 }
 
 pub fn setup(mut commands: Commands) {
-    let translation = Vec3::new(-2.0, 10.0, 40.0);
+    let translation = Vec3::new(0.0, 0.0, 40.0);
     let radius = translation.length();
 
     commands.spawn((
