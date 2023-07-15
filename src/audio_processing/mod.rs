@@ -12,7 +12,7 @@ pub struct AudioProcessingPlugin;
 impl Plugin for AudioProcessingPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<AudioSpectrum>()
-            .add_startup_system(setup_audio_stream)
-            .add_system(update_audio_spectrum);
+            .add_systems(Startup, setup_audio_stream)
+            .add_systems(Update, update_audio_spectrum);
     }
 }

@@ -11,10 +11,12 @@ use scenes::ripple::RipplePlugin;
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::BLACK))
-        .add_plugins(DefaultPlugins)
-        .add_plugin(CameraPlugin)
-        .add_plugin(AudioProcessingPlugin)
-        .add_plugin(OrbitalPlugin)
-        .add_plugin(RipplePlugin)
+        .add_plugins((
+            DefaultPlugins,
+            CameraPlugin,
+            AudioProcessingPlugin,
+            OrbitalPlugin,
+            RipplePlugin,
+        ))
         .run();
 }

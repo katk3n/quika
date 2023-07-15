@@ -89,7 +89,11 @@ pub fn switch_visibility(
 ) {
     if keyboard_input.just_pressed(KeyCode::Key1) {
         for mut visibility in query.iter_mut() {
-            visibility.is_visible = !visibility.is_visible;
+            *visibility = match *visibility {
+                Visibility::Inherited => Visibility::Hidden,
+                Visibility::Hidden => Visibility::Inherited,
+                _ => Visibility::Inherited,
+            };
         }
     }
 }

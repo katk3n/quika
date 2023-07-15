@@ -9,9 +9,7 @@ pub struct OrbitalPlugin;
 
 impl Plugin for OrbitalPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup_scene)
-            .add_system(revolve_spheres)
-            .add_system(bounce_spheres)
-            .add_system(switch_visibility);
+        app.add_systems(Startup, setup_scene)
+            .add_systems(Update, (revolve_spheres, bounce_spheres, switch_visibility));
     }
 }

@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = "0.9.0"
+bevy = "0.11.0"
 cpal = "0.15.2"
 ringbuf = "0.2.2"
 spectrum-analyzer = "1.2.6"

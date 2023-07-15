@@ -49,7 +49,7 @@ pub fn bounce_particles(
     mut query: Query<(&mut Transform, &Bouncing)>,
     source_query: Query<&Source>,
 ) {
-    for (mut transform, bouncing) in query.iter_mut() {
+    for (mut transform, _bouncing) in query.iter_mut() {
         let mut height = 0.0;
         for source in source_query.iter() {
             let distance = transform.translation.distance(source.point);
@@ -94,7 +94,11 @@ pub fn switch_visibility(
 ) {
     if keyboard_input.just_pressed(KeyCode::Key2) {
         for mut visibility in query.iter_mut() {
-            visibility.is_visible = !visibility.is_visible;
+            *visibility = match *visibility {
+                Visibility::Inherited => Visibility::Hidden,
+                Visibility::Hidden => Visibility::Inherited,
+                _ => Visibility::Inherited,
+            };
         }
     }
 }

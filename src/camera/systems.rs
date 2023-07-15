@@ -1,4 +1,4 @@
-use bevy::{core_pipeline::bloom::BloomSettings, prelude::*};
+use bevy::{core_pipeline::bloom::BloomSettings, prelude::*, window::PrimaryWindow};
 
 const CAMERA_VEROCITY: f32 = 50.0;
 
@@ -39,7 +39,7 @@ pub fn setup(mut commands: Commands) {
 }
 
 pub fn rotate(
-    windows: Res<Windows>,
+    query_window: Query<&Window, With<PrimaryWindow>>,
     keyboard_input: Res<Input<KeyCode>>,
     time: Res<Time>,
     mut query: Query<(&mut OrbitCamera, &mut Transform)>,
@@ -70,10 +70,11 @@ pub fn rotate(
 
     rotation_move *= time.delta_seconds() * CAMERA_VEROCITY;
 
+    let window = query_window.get_single().unwrap();
+
     for (orbit, mut transform) in query.iter_mut() {
-        let window = get_primary_window_size(&windows);
-        let delta_x = rotation_move.x / window.x * std::f32::consts::PI * 2.0;
-        let delta_y = rotation_move.y / window.y * std::f32::consts::PI;
+        let delta_x = rotation_move.x / window.width() * std::f32::consts::PI * 2.0;
+        let delta_y = rotation_move.y / window.height() * std::f32::consts::PI;
         let yaw = Quat::from_rotation_y(-delta_x);
         let pitch = Quat::from_rotation_x(-delta_y);
         transform.rotation = yaw * transform.rotation; // rotate around global y axis
@@ -83,10 +84,4 @@ pub fn rotate(
         transform.translation =
             orbit.focus + rot_matrix.mul_vec3(Vec3::new(0.0, 0.0, orbit.radius));
     }
-}
-
-fn get_primary_window_size(windows: &Res<Windows>) -> Vec2 {
-    let window = windows.get_primary().unwrap();
-    let window = Vec2::new(window.width() as f32, window.height() as f32);
-    window
 }
